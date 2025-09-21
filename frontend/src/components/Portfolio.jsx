@@ -20,7 +20,6 @@ import {
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { Toaster } from './ui/sonner';
 import { useToast } from '../hooks/use-toast';
 import { mockData } from '../data/mock';
 
