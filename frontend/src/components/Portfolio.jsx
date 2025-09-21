@@ -448,7 +448,7 @@ const Portfolio = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => setActiveProject(null)}
-                  className="text-[#8B949E] hover:text-[#F0F6FC]"
+                  className="text-[#8B949E] hover:text-[#F0F6FC] hover:bg-[#21262D]"
                 >
                   <X className="w-5 h-5" />
                 </Button>
