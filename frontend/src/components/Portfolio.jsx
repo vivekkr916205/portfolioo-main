@@ -506,6 +506,9 @@ const Portfolio = () => {
           </div>
         </div>
       </footer>
+
+      {/* Toaster for notifications */}
+      <Toaster />
     </div>
   );
 };
