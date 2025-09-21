@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
-import ReactTyped from 'react-typed';
+import { ReactTyped } from 'react-typed';
 import { 
   Github, 
   Linkedin, 
