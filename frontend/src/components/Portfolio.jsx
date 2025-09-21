@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import { 
   Github, 
   Linkedin, 
@@ -12,11 +13,14 @@ import {
   Briefcase,
   User,
   ChevronRight,
-  X
+  X,
+  Send,
+  CheckCircle
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import { useToast } from '../hooks/use-toast';
 import { mockData } from '../data/mock';
 
 const Portfolio = () => {
