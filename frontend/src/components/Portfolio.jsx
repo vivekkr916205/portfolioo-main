@@ -26,6 +26,13 @@ import { mockData } from '../data/mock';
 const Portfolio = () => {
   const [activeProject, setActiveProject] = useState(null);
   const [isVisible, setIsVisible] = useState({});
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
