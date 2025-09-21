@@ -58,11 +58,58 @@ const Portfolio = () => {
   };
 
   const handleDownloadResume = () => {
-    // Mock resume download - in real implementation, this would download actual PDF
+    // Create a mock resume download - in real implementation, this would be an actual PDF
+    toast({
+      title: "Resume Download",
+      description: "Resume download started! (Mock implementation - add actual PDF in production)",
+    });
+    
+    // Mock download functionality
     const link = document.createElement('a');
-    link.href = '/resume-vivek-kumar.pdf'; // This would be actual resume path
+    link.href = 'data:application/pdf;base64,JVBERi0xLjQKJdPr6eEKMSAwIG9iago8PAovVGl0bGUgKFZpdmVrIEt1bWFyIC0gUmVzdW1lKQovQ3JlYXRvciAoTm90aW9uLWluc3BpcmVkIFBvcnRmb2xpbykKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDMgMCBSCj4+CmVuZG9iagozIDAgb2JqCjw8Ci9UeXBlIC9QYWdlcwovS2lkcyBbNCAwIFJdCi9Db3VudCAxCj4+CmVuZG9iago0IDAgb2JqCjw8Ci9UeXBlIC9QYWdlCi9QYXJlbnQgMyAwIFIKL01lZGlhQm94IFswIDAgNjEyIDc5Ml0KPj4KZW5kb2JqCnhyZWYKMCA1CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA3NCAwMDAwMCBuCjAwMDAwMDAxMjEgMDAwMDAgbgowMDAwMDAwMTc4IDAwMDAwIG4KdHJhaWxlcgo8PAovU2l6ZSA1Ci9Sb290IDIgMCBSCi9JbmZvIDEgMCBSCj4+CnN0YXJ0eHJlZgoyNTUKJSVFT0Y=';
     link.download = 'Vivek_Kumar_Resume.pdf';
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // EmailJS configuration - These would be real values in production
+      const serviceID = 'service_portfolio'; // Mock service ID
+      const templateID = 'template_contact'; // Mock template ID
+      const userID = 'user_portfolio'; // Mock user ID
+
+      // Mock successful submission
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      toast({
+        title: "Message Sent! ✉️",
+        description: "Thank you for reaching out! I'll get back to you soon.",
+      });
+
+      // Reset form
+      setFormData({ name: '', email: '', message: '' });
+      
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
