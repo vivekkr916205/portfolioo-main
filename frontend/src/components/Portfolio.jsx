@@ -370,36 +370,59 @@ const Portfolio = () => {
                 </Button>
               </div>
               <Card className="bg-[#161B22] border-[#21262D] p-6">
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label className="block text-[#F0F6FC] mb-2">Name</label>
                     <input 
-                      type="text" 
-                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-md px-4 py-3 text-[#F0F6FC] focus:border-[#8B949E] focus:outline-none"
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-md px-4 py-3 text-[#F0F6FC] focus:border-[#8B949E] focus:outline-none transition-colors"
                       placeholder="Your name"
                     />
                   </div>
                   <div>
                     <label className="block text-[#F0F6FC] mb-2">Email</label>
                     <input 
-                      type="email" 
-                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-md px-4 py-3 text-[#F0F6FC] focus:border-[#8B949E] focus:outline-none"
+                      type="email"
+                      name="email" 
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-md px-4 py-3 text-[#F0F6FC] focus:border-[#8B949E] focus:outline-none transition-colors"
                       placeholder="your.email@example.com"
                     />
                   </div>
                   <div>
                     <label className="block text-[#F0F6FC] mb-2">Message</label>
                     <textarea 
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
                       rows={4}
-                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-md px-4 py-3 text-[#F0F6FC] focus:border-[#8B949E] focus:outline-none resize-none"
+                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-md px-4 py-3 text-[#F0F6FC] focus:border-[#8B949E] focus:outline-none resize-none transition-colors"
                       placeholder="Your message..."
                     />
                   </div>
                   <Button 
-                    type="submit" 
-                    className="w-full bg-[#F0F6FC] text-[#0D1117] hover:bg-[#8B949E]"
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#F0F6FC] text-[#0D1117] hover:bg-[#8B949E] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Send Message
+                    {isSubmitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#0D1117] mr-2"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
               </Card>
