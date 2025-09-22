@@ -114,12 +114,14 @@ const Portfolio = () => {
   const handleDownloadResume = () => {
     toast({
       title: "Resume Download",
-      description: "Resume download started! (Mock implementation - add actual PDF in production)",
+      description: "Downloading Vivek Kumar's resume...",
     });
     
+    // Create download link for the PDF file
     const link = document.createElement('a');
-    link.href = 'data:application/pdf;base64,JVBERi0xLjQKJdPr6eEKMSAwIG9iago8PAovVGl0bGUgKFZpdmVrIEt1bWFyIC0gUmVzdW1lKQovQ3JlYXRvciAoTm90aW9uLWluc3BpcmVkIFBvcnRmb2xpbykKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDMgMCBSCj4+CmVuZG9iagozIDAgb2JqCjw8Ci9UeXBlIC9QYWdlcwovS2lkcyBbNCAwIFJdCi9Db3VudCAxCj4+CmVuZG9iago0IDAgb2JqCjw8Ci9UeXBlIC9QYWdlCi9QYXJlbnQgMyAwIFIKL01lZGlhQm94IFswIDAgNjEyIDc5Ml0KPj4KZW5kb2JqCnhyZWYKMCA1CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA3NCAwMDAwMCBuCjAwMDAwMDAxMjEgMDAwMDAgbgowMDAwMDAwMTc4IDAwMDAwIG4KdHJhaWxlcgo8PAovU2l6ZSA1Ci9Sb290IDIgMCBSCi9JbmZvIDEgMCBSCj4+CnN0YXJ0eHJlZgoyNTUKJSVFT0Y=';
+    link.href = '/Vivek_Kumar_Resume.pdf'; // PDF file in public folder
     link.download = 'Vivek_Kumar_Resume.pdf';
+    link.target = '_blank'; // Open in new tab as fallback
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
