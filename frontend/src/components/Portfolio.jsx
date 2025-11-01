@@ -583,7 +583,7 @@ const Portfolio = () => {
                       <FaLinkedin className={`w-6 h-6 ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'}`} />
                     </motion.div>
                     <a 
-                      href="https://www.linkedin.com/in/vivekkumar-285708383" 
+                      href="www.linkedin.com/in/vivekkumar-developer" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
@@ -604,7 +604,7 @@ const Portfolio = () => {
                       <FaGithub className={`w-6 h-6 ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'}`} />
                     </motion.div>
                     <a 
-                      href="https://github.com" 
+                      href="https://github.com/vivekkr91" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
