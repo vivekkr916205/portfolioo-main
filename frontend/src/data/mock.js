@@ -57,7 +57,8 @@ export const mockData = {
       status: "Production (Live)",
       role: "Full-Stack Developer",
       liveUrl: "https://webislandinfo.com/l4k/",
-      demoUrl: "https://webislandinfo.com/l4k/"
+      demoUrl: "https://webislandinfo.com/l4k/",
+      image: "/images/lookingforcare-screenshot.png"
     },
     {
       title: "Webisland InfoTech Website",
@@ -76,7 +77,8 @@ export const mockData = {
       role: "React Developer",
       liveUrl: null,
       demoUrl: null,
-      note: "Client project under NDA"
+      note: "Client project under NDA",
+      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80"
     },
     {
       title: "Digital Solutions - Dynamic User Interface",
@@ -95,7 +97,8 @@ export const mockData = {
       role: "React Developer",
       liveUrl: null,
       demoUrl: null,
-      note: "Private client projects"
+      note: "Private client projects",
+      image: "https://images.unsplash.com/photo-1555421689-d68471e189f2?w=800&q=80"
     }
   ],
   experience: [
@@ -126,7 +129,9 @@ export const mockData = {
       platform: "Coursera",
       date: "2024",
       credentialUrl: null,
-      logo: "meta"
+      logo: "meta",
+      logoText: "META",
+      color: "#0668E1"
     },
     {
       id: 2,
@@ -135,7 +140,9 @@ export const mockData = {
       platform: "McKinsey",
       date: "2025",
       credentialUrl: null,
-      logo: "mckinsey"
+      logo: "mckinsey",
+      logoText: "McKinsey",
+      color: "#00539B"
     },
     {
       id: 3,
@@ -144,7 +151,9 @@ export const mockData = {
       platform: "Coursera",
       date: "2023",
       credentialUrl: null,
-      logo: "deeplearning"
+      logo: "deeplearning",
+      logoText: "DeepLearning.AI",
+      color: "#FF6B6B"
     }
   ]
 };

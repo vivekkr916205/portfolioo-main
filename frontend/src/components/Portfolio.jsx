@@ -65,6 +65,7 @@ const Portfolio = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -308,6 +309,7 @@ const Portfolio = () => {
 
       {/* Hero Section */}
       <section 
+        id="about"
         className="pt-32 pb-20 px-6 relative min-h-screen flex items-center"
         style={{
           background: darkMode 
@@ -535,51 +537,39 @@ const Portfolio = () => {
                               ? "0 10px 30px rgba(139, 148, 158, 0.2)"
                               : "0 10px 30px rgba(0, 0, 0, 0.1)"
                           }}
-                          className={`
-                            ${cardClasses} 
-                            p-6 
-                            rounded-lg 
-                            flex 
-                            flex-col 
-                            items-center 
-                            justify-center 
-                            text-center 
-                            cursor-pointer
-                            transition-all 
-                            duration-300
-                            group
-                          `}
                         >
-                          {/* Icon */}
-                          <motion.div
-                            whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-                            transition={{ duration: 0.5 }}
-                          >
-                            <Icon 
-                              className="w-12 h-12 mb-3 group-hover:scale-110 transition-transform duration-300" 
-                              style={{ color: IconData.color }}
-                            />
-                          </motion.div>
-                          
-                          {/* Skill Name */}
-                          <h4 className={`text-sm font-semibold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>
-                            {skill.name}
-                          </h4>
-                          
-                          {/* Level Badge (optional, subtle) */}
-                          <Badge 
-                            className={`
-                              mt-2 text-xs
-                              ${skill.level === 'Advanced' 
-                                ? darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700'
-                                : skill.level === 'Intermediate'
-                                ? darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-700'
-                                : darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'
-                              }
-                            `}
-                          >
-                            {skill.level}
-                          </Badge>
+                          <Card className={`${cardClasses} p-6 h-full flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 group`}>
+                            {/* Icon */}
+                            <motion.div
+                              whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                              transition={{ duration: 0.5 }}
+                            >
+                              <Icon 
+                                className="w-12 h-12 mb-3 group-hover:scale-110 transition-transform duration-300" 
+                                style={{ color: IconData.color }}
+                              />
+                            </motion.div>
+                            
+                            {/* Skill Name */}
+                            <h4 className={`text-sm font-semibold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>
+                              {skill.name}
+                            </h4>
+                            
+                            {/* Level Badge (optional, subtle) */}
+                            <Badge 
+                              className={`
+                                mt-2 text-xs
+                                ${skill.level === 'Advanced' 
+                                  ? darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700'
+                                  : skill.level === 'Intermediate'
+                                  ? darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-700'
+                                  : darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'
+                                }
+                              `}
+                            >
+                              {skill.level}
+                            </Badge>
+                          </Card>
                         </motion.div>
                       );
                     })}
@@ -622,9 +612,6 @@ const Portfolio = () => {
             {/* Certifications Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {mockData.certifications.map((cert, index) => {
-                const logoData = getCertificationLogo(cert.logo);
-                const LogoIcon = logoData.icon;
-                
                 return (
                   <motion.div
                     key={cert.id}
@@ -641,17 +628,27 @@ const Portfolio = () => {
                     <Card className={`${cardClasses} p-6 h-full flex flex-col items-center text-center transition-all duration-300`}>
                       {/* Logo/Badge */}
                       <motion.div
-                        className={`w-24 h-24 rounded-full flex items-center justify-center mb-6 ${
-                          darkMode ? 'bg-opacity-10' : 'bg-opacity-100'
-                        }`}
-                        style={{ backgroundColor: logoData.bgColor }}
-                        whileHover={{ rotate: [0, -5, 5, -5, 0] }}
-                        transition={{ duration: 0.5 }}
+                        className="w-24 h-24 rounded-full flex items-center justify-center mb-6 p-2"
+                        style={{ 
+                          backgroundColor: cert.color ? `${cert.color}15` : (darkMode ? '#21262D' : '#F3F4F6'),
+                          border: `2px solid ${cert.color || (darkMode ? '#8B949E' : '#D1D5DB')}`
+                        }}
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ duration: 0.3 }}
                       >
-                        <LogoIcon 
-                          className="w-12 h-12" 
-                          style={{ color: logoData.color }}
-                        />
+                        {cert.logoText ? (
+                          <span 
+                            className="font-bold text-xs text-center leading-tight"
+                            style={{ color: cert.color || (darkMode ? '#F0F6FC' : '#1F2937') }}
+                          >
+                            {cert.logoText}
+                          </span>
+                        ) : (
+                          <Award 
+                            className="w-10 h-10"
+                            style={{ color: cert.color || (darkMode ? '#8B949E' : '#6B7280') }}
+                          />
+                        )}
                       </motion.div>
 
                       {/* Certificate Name */}
@@ -724,9 +721,18 @@ const Portfolio = () => {
                 >
                   <Card className={`${cardClasses} p-6 h-full hover:border-[#30363D] transition-all duration-300`}>
                     <div onClick={() => setActiveProject(project)}>
-                      {/* Project thumbnail placeholder */}
-                      <div className={`w-full h-48 ${darkMode ? 'bg-[#21262D]' : 'bg-gray-100'} rounded-lg mb-4 flex items-center justify-center`}>
-                        <Code2 className={`w-12 h-12 ${darkMode ? 'text-[#8B949E]' : 'text-gray-400'}`} />
+                      {/* Project thumbnail */}
+                      <div className={`w-full h-48 ${darkMode ? 'bg-[#21262D]' : 'bg-gray-100'} rounded-lg mb-4 flex items-center justify-center overflow-hidden`}>
+                        {project.image ? (
+                          <img 
+                            src={project.image} 
+                            alt={`${project.title} screenshot`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <Code2 className={`w-12 h-12 ${darkMode ? 'text-[#8B949E]' : 'text-gray-400'}`} />
+                        )}
                       </div>
                       <div className="flex items-center justify-between mb-2">
                         <Badge className={`${darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700'} text-xs`}>
@@ -846,7 +852,7 @@ const Portfolio = () => {
                       <FaLinkedin className={`w-6 h-6 ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'}`} />
                     </motion.div>
                     <a 
-                      href="www.linkedin.com/in/vivekkumar-developer" 
+                      href="https://www.linkedin.com/in/vivek-kumar-285708383" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
@@ -867,7 +873,7 @@ const Portfolio = () => {
                       <FaGithub className={`w-6 h-6 ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'}`} />
                     </motion.div>
                     <a 
-                      href="https://github.com/vivekkr91" 
+                      href="https://github.com/vivekkr916205" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
@@ -916,6 +922,18 @@ const Portfolio = () => {
                       required
                       className={`w-full ${inputClasses} rounded-md px-4 py-3 focus:outline-none transition-all duration-300`}
                       placeholder="your.email@example.com"
+                      whileFocus={{ scale: 1.02 }}
+                    />
+                  </div>
+                  <div>
+                    <label className={`block ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'} mb-2`}>Subject</label>
+                    <motion.input 
+                      type="text"
+                      name="subject" 
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className={`w-full ${inputClasses} rounded-md px-4 py-3 focus:outline-none transition-all duration-300`}
+                      placeholder="Subject (optional)"
                       whileFocus={{ scale: 1.02 }}
                     />
                   </div>
@@ -1066,51 +1084,105 @@ const Portfolio = () => {
 
       {/* Footer */}
       <footer className={`border-t ${darkMode ? 'border-[#21262D]' : 'border-gray-200'} py-12 px-6`}>
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.p 
-            className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} mb-4`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-          >
-            © 2025 Vivek Kumar | Built with React & Passion for Clean Code
-          </motion.p>
-          <div className="flex justify-center items-center space-x-2 mb-4">
-            <span className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'}`}>Made with</span>
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            >
-              <Heart className="w-4 h-4 text-red-500 fill-current" />
-            </motion.div>
-            <span className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'}`}>and React</span>
+        <div className="max-w-7xl mx-auto">
+          {/* Desktop Layout */}
+          <div className="hidden md:flex justify-between items-center">
+            {/* Left: Name & Tagline */}
+            <div>
+              <h3 className={`text-xl font-bold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'} mb-1`}>
+                Vivek Kumar
+              </h3>
+              <p className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} text-sm`}>
+                React & Node.js Developer | Building Solutions That Matter
+              </p>
+            </div>
+
+            {/* Center: Social Links */}
+            <div className="flex space-x-6">
+              <motion.a 
+                href="https://www.linkedin.com/in/vivek-kumar-285708383" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
+                whileHover={{ scale: 1.2 }}
+                aria-label="LinkedIn Profile"
+              >
+                <FaLinkedin className="w-6 h-6" />
+              </motion.a>
+              <motion.a 
+                href="https://github.com/vivekkr916205" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
+                whileHover={{ scale: 1.2 }}
+                aria-label="GitHub Profile"
+              >
+                <FaGithub className="w-6 h-6" />
+              </motion.a>
+              <motion.a 
+                href="mailto:vivek95675@gmail.com"
+                className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
+                whileHover={{ scale: 1.2 }}
+                aria-label="Email"
+              >
+                <FaEnvelope className="w-6 h-6" />
+              </motion.a>
+            </div>
+
+            {/* Right: Copyright */}
+            <div className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} text-sm`}>
+              © 2025 Vivek Kumar. All rights reserved.
+            </div>
           </div>
-          <div className="flex justify-center space-x-6">
-            <motion.a 
-              href="mailto:vivek888gaya@gmail.com" 
-              className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
-              whileHover={{ scale: 1.2, rotate: 5 }}
-            >
-              <Mail className="w-5 h-5" />
-            </motion.a>
-            <motion.a 
-              href="https://www.linkedin.com/in/vivekkumar-285708383" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
-              whileHover={{ scale: 1.2, rotate: 5 }}
-            >
-              <Linkedin className="w-5 h-5" />
-            </motion.a>
-            <motion.a 
-              href="https://github.com" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
-              whileHover={{ scale: 1.2, rotate: 5 }}
-            >
-              <Github className="w-5 h-5" />
-            </motion.a>
+
+          {/* Mobile Layout */}
+          <div className="md:hidden text-center space-y-6">
+            {/* Name & Tagline */}
+            <div>
+              <h3 className={`text-xl font-bold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'} mb-2`}>
+                Vivek Kumar
+              </h3>
+              <p className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} text-sm`}>
+                React & Node.js Developer | Building Solutions That Matter
+              </p>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex justify-center space-x-8">
+              <motion.a 
+                href="https://www.linkedin.com/in/vivek-kumar-285708383" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
+                whileHover={{ scale: 1.2 }}
+                aria-label="LinkedIn Profile"
+              >
+                <FaLinkedin className="w-6 h-6" />
+              </motion.a>
+              <motion.a 
+                href="https://github.com/vivekkr916205" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
+                whileHover={{ scale: 1.2 }}
+                aria-label="GitHub Profile"
+              >
+                <FaGithub className="w-6 h-6" />
+              </motion.a>
+              <motion.a 
+                href="mailto:vivek95675@gmail.com"
+                className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
+                whileHover={{ scale: 1.2 }}
+                aria-label="Email"
+              >
+                <FaEnvelope className="w-6 h-6" />
+              </motion.a>
+            </div>
+
+            {/* Copyright */}
+            <div className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} text-sm`}>
+              © 2025 Vivek Kumar. All rights reserved.
+            </div>
           </div>
         </div>
       </footer>
