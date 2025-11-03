@@ -20,7 +20,8 @@ import {
   ArrowUp,
   Sun,
   Moon,
-  Heart
+  Heart,
+  Award
 } from 'lucide-react';
 import { 
   FaReact, 
@@ -33,9 +34,23 @@ import {
   FaGitAlt,
   FaLinkedin,
   FaGithub,
-  FaEnvelope
+  FaEnvelope,
+  FaNpm,
+  FaDocker,
+  FaAws
 } from 'react-icons/fa';
-import { SiMongodb, SiExpress, SiTensorflow, SiMysql } from 'react-icons/si';
+import { 
+  SiMongodb, 
+  SiExpress, 
+  SiTensorflow, 
+  SiMysql, 
+  SiTypescript, 
+  SiTailwindcss, 
+  SiMui, 
+  SiRedux, 
+  SiPostgresql,
+  SiVercel
+} from 'react-icons/si';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -56,19 +71,41 @@ const Portfolio = () => {
   const { toast } = useToast();
 
   // Skill icons mapping
-  const skillIcons = {
-    'React.js': { icon: FaReact, color: '#61DAFB', level: 90 },
-    'Node.js': { icon: FaNodeJs, color: '#68A063', level: 85 },
-    'JavaScript': { icon: FaJs, color: '#F7DF1E', level: 88 },
-    'Python': { icon: FaPython, color: '#3776AB', level: 82 },
-    'HTML5': { icon: FaHtml5, color: '#E34F26', level: 95 },
-    'CSS3': { icon: FaCss3Alt, color: '#1572B6', level: 90 },
-    'Java': { icon: FaJava, color: '#ED8B00', level: 78 },
-    'MongoDB': { icon: SiMongodb, color: '#47A248', level: 80 },
-    'Express.js': { icon: SiExpress, color: '#000000', level: 85 },
-    'TensorFlow': { icon: SiTensorflow, color: '#FF6F00', level: 70 },
-    'MySQL': { icon: SiMysql, color: '#4479A1', level: 75 },
-    'Git': { icon: FaGitAlt, color: '#F05032', level: 88 }
+  const getSkillIcon = (iconName) => {
+    const iconMap = {
+      'react': { icon: FaReact, color: '#61DAFB' },
+      'javascript': { icon: FaJs, color: '#F7DF1E' },
+      'typescript': { icon: SiTypescript, color: '#3178C6' },
+      'html': { icon: FaHtml5, color: '#E34F26' },
+      'tailwind': { icon: SiTailwindcss, color: '#06B6D4' },
+      'mui': { icon: SiMui, color: '#007FFF' },
+      'redux': { icon: SiRedux, color: '#764ABC' },
+      'nodejs': { icon: FaNodeJs, color: '#68A063' },
+      'express': { icon: SiExpress, color: '#000000' },
+      'api': { icon: Code2, color: '#FF6B6B' },
+      'python': { icon: FaPython, color: '#3776AB' },
+      'mongodb': { icon: SiMongodb, color: '#47A248' },
+      'postgresql': { icon: SiPostgresql, color: '#336791' },
+      'git': { icon: FaGitAlt, color: '#F05032' },
+      'deploy': { icon: SiVercel, color: '#000000' },
+      'vscode': { icon: Code2, color: '#007ACC' },
+      'npm': { icon: FaNpm, color: '#CB3837' },
+      'docker': { icon: FaDocker, color: '#2496ED' },
+      'aws': { icon: FaAws, color: '#FF9900' }
+    };
+    
+    return iconMap[iconName] || { icon: Code2, color: '#8B949E' };
+  };
+
+  // Certification logo mapping
+  const getCertificationLogo = (logoName) => {
+    const logoMap = {
+      'meta': { icon: Award, color: '#0668E1', bgColor: '#E7F3FF' },
+      'mckinsey': { icon: Award, color: '#00A3E0', bgColor: '#E0F7FF' },
+      'deeplearning': { icon: Award, color: '#FF6F61', bgColor: '#FFE5E2' }
+    };
+    
+    return logoMap[logoName] || { icon: Award, color: '#8B949E', bgColor: '#F0F0F0' };
   };
 
   useEffect(() => {
@@ -244,7 +281,7 @@ const Portfolio = () => {
             
             <div className="flex items-center space-x-8">
               <div className="hidden md:flex space-x-8">
-                {['about', 'education', 'skills', 'projects', 'contact'].map((item) => (
+                {['about', 'education', 'skills', 'certifications', 'projects', 'contact'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
@@ -270,67 +307,103 @@ const Portfolio = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 relative">
+      <section 
+        className="pt-32 pb-20 px-6 relative min-h-screen flex items-center"
+        style={{
+          background: darkMode 
+            ? 'linear-gradient(135deg, #0D1117 0%, #1a1f2e 50%, #2d1b4e 100%)'
+            : 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%)'
+        }}
+      >
         <AnimatedBackground />
-        <div className="max-w-6xl mx-auto relative z-10">
+        <div className="max-w-6xl mx-auto relative z-10 w-full">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-left md:text-left max-w-4xl"
           >
-            <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-[#F0F6FC] to-[#8B949E] bg-clip-text text-transparent">
-              Vivek Kumar
-            </h1>
+            {/* Headline */}
+            <motion.h1 
+              className={`text-5xl md:text-7xl font-bold mb-6 ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Hi, I'm <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Vivek Kumar</span>
+            </motion.h1>
             
-            {/* Typing Animation */}
-            <div className="text-2xl md:text-3xl mb-4 h-12">
-              <ReactTyped
-                strings={[
-                  'Computer Engineering Student',
-                  'MERN Stack Developer', 
-                  'AI/ML Enthusiast'
-                ]}
-                typeSpeed={50}
-                backSpeed={30}
-                backDelay={2000}
-                loop
-                className={darkMode ? 'text-[#8B949E]' : 'text-gray-600'}
-              />
-            </div>
+            {/* Subheadline */}
+            <motion.h2 
+              className={`text-2xl md:text-4xl font-semibold mb-6 ${darkMode ? 'text-[#8B949E]' : 'text-gray-700'}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              React & Node.js Developer | Building Modern Web Applications
+            </motion.h2>
             
-            <div className={`flex items-center justify-center gap-2 ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} mb-6`}>
-              <MapPin className="w-5 h-5" />
-              <span>Gaya, Bihar, India</span>
-            </div>
-            <p className={`text-xl ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} mb-12 max-w-4xl mx-auto leading-relaxed`}>
-              Building innovative solutions through code | MERN Stack Developer | AI/ML Enthusiast
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                onClick={() => scrollToSection('projects')}
-                className={`${darkMode ? 'bg-[#F0F6FC] text-[#0D1117] hover:bg-[#8B949E]' : 'bg-gray-900 text-white hover:bg-gray-700'} px-8 py-3 text-lg font-medium`}
+            {/* Description */}
+            <motion.p 
+              className={`text-lg md:text-xl ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} mb-8 leading-relaxed max-w-3xl`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              I help startups and businesses build fast, scalable web solutions using React, Node.js, and MongoDB. 
+              From concept to deployment, I deliver professional web applications that solve real problems.
+            </motion.p>
+            
+            {/* CTA Buttons */}
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                View My Work
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </Button>
-              <Button 
-                onClick={() => scrollToSection('contact')}
-                variant="outline"
-                className={`border-[#21262D] ${darkMode ? 'text-[#F0F6FC] hover:bg-[#21262D]' : 'text-gray-900 hover:bg-gray-100'} px-8 py-3 text-lg font-medium`}
+                <Button 
+                  onClick={() => scrollToSection('projects')}
+                  className={`
+                    ${darkMode 
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700' 
+                      : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600'
+                    } 
+                    text-white px-8 py-6 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300
+                  `}
+                  aria-label="View my projects"
+                >
+                  View My Work
+                  <ChevronRight className="w-5 h-5 ml-2" />
+                </Button>
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                Get In Touch
-                <Mail className="w-5 h-5 ml-2" />
-              </Button>
-              <Button 
-                onClick={handleDownloadResume}
-                variant="outline"
-                className={`border-[#21262D] ${darkMode ? 'text-[#F0F6FC] hover:bg-[#21262D]' : 'text-gray-900 hover:bg-gray-100'} px-8 py-3 text-lg font-medium`}
-              >
-                Download Resume
-                <Download className="w-5 h-5 ml-2" />
-              </Button>
-            </div>
+                <Button 
+                  onClick={() => scrollToSection('contact')}
+                  variant="outline"
+                  className={`
+                    ${darkMode 
+                      ? 'border-2 border-blue-500 text-blue-400 hover:bg-blue-500/10' 
+                      : 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50'
+                    } 
+                    px-8 py-6 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300
+                  `}
+                  aria-label="Contact me"
+                >
+                  Let's Talk
+                  <Mail className="w-5 h-5 ml-2" />
+                </Button>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -404,54 +477,219 @@ const Portfolio = () => {
 
       {/* Skills Section */}
       <section id="skills" className="py-20 px-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isVisible.skills ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            <motion.h2 
-              className="text-4xl font-bold mb-12 flex items-center"
-              initial={{ opacity: 0, x: -20 }}
-              animate={isVisible.skills ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <Code2 className={`w-8 h-8 mr-4 ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'}`} />
-              Technical Skills
-            </motion.h2>
-            <div className="space-y-8">
-              {/* Skills with progress bars */}
-              <Card className={`${cardClasses} p-6`}>
-                <h3 className={`text-xl font-semibold mb-6 ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>Technical Proficiency</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {Object.entries(skillIcons).map(([skill, { icon: Icon, color, level }], index) => (
-                    <motion.div
-                      key={skill}
-                      className="space-y-2"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={isVisible.skills ? { opacity: 1, x: 0 } : {}}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Icon className="w-5 h-5" style={{ color }} />
-                          <span className={`font-medium ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>{skill}</span>
-                        </div>
-                        <span className={`text-sm ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'}`}>{level}%</span>
-                      </div>
-                      <div className={`w-full ${darkMode ? 'bg-[#21262D]' : 'bg-gray-200'} rounded-full h-2`}>
+            {/* Section Title */}
+            <div className="text-center mb-12">
+              <motion.h2 
+                className={`text-4xl md:text-5xl font-bold mb-4 ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isVisible.skills ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                Technical Skills
+              </motion.h2>
+              <motion.p 
+                className={`text-lg ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} max-w-2xl mx-auto`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isVisible.skills ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                Technologies I work with to build modern web solutions
+              </motion.p>
+            </div>
+
+            {/* Skills Categories */}
+            <div className="space-y-12">
+              {Object.entries(mockData.skills).map(([categoryKey, categoryData], categoryIndex) => (
+                <motion.div
+                  key={categoryKey}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isVisible.skills ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.6, delay: categoryIndex * 0.2 }}
+                >
+                  {/* Category Title */}
+                  <h3 className={`text-2xl font-semibold mb-6 ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>
+                    {categoryData.category}
+                  </h3>
+
+                  {/* Skills Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {categoryData.items.map((skill, skillIndex) => {
+                      const IconData = getSkillIcon(skill.icon);
+                      const Icon = IconData.icon;
+                      
+                      return (
                         <motion.div
-                          className="h-2 rounded-full"
-                          style={{ backgroundColor: color }}
-                          initial={{ width: 0 }}
-                          animate={isVisible.skills ? { width: `${level}%` } : { width: 0 }}
-                          transition={{ duration: 1, delay: index * 0.1 + 0.5 }}
+                          key={skill.name}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={isVisible.skills ? { opacity: 1, scale: 1 } : {}}
+                          transition={{ duration: 0.4, delay: categoryIndex * 0.2 + skillIndex * 0.05 }}
+                          whileHover={{ 
+                            scale: 1.05,
+                            boxShadow: darkMode 
+                              ? "0 10px 30px rgba(139, 148, 158, 0.2)"
+                              : "0 10px 30px rgba(0, 0, 0, 0.1)"
+                          }}
+                          className={`
+                            ${cardClasses} 
+                            p-6 
+                            rounded-lg 
+                            flex 
+                            flex-col 
+                            items-center 
+                            justify-center 
+                            text-center 
+                            cursor-pointer
+                            transition-all 
+                            duration-300
+                            group
+                          `}
+                        >
+                          {/* Icon */}
+                          <motion.div
+                            whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            <Icon 
+                              className="w-12 h-12 mb-3 group-hover:scale-110 transition-transform duration-300" 
+                              style={{ color: IconData.color }}
+                            />
+                          </motion.div>
+                          
+                          {/* Skill Name */}
+                          <h4 className={`text-sm font-semibold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>
+                            {skill.name}
+                          </h4>
+                          
+                          {/* Level Badge (optional, subtle) */}
+                          <Badge 
+                            className={`
+                              mt-2 text-xs
+                              ${skill.level === 'Advanced' 
+                                ? darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700'
+                                : skill.level === 'Intermediate'
+                                ? darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-700'
+                                : darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'
+                              }
+                            `}
+                          >
+                            {skill.level}
+                          </Badge>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Certifications Section */}
+      <section id="certifications" className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isVisible.certifications ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+          >
+            {/* Section Title */}
+            <div className="text-center mb-12">
+              <motion.h2 
+                className={`text-4xl md:text-5xl font-bold mb-4 ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isVisible.certifications ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                Certifications
+              </motion.h2>
+              <motion.p 
+                className={`text-lg ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} max-w-2xl mx-auto`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isVisible.certifications ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                Continuous learning and professional development
+              </motion.p>
+            </div>
+
+            {/* Certifications Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {mockData.certifications.map((cert, index) => {
+                const logoData = getCertificationLogo(cert.logo);
+                const LogoIcon = logoData.icon;
+                
+                return (
+                  <motion.div
+                    key={cert.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isVisible.certifications ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.6, delay: index * 0.2 }}
+                    whileHover={{ 
+                      y: -10,
+                      boxShadow: darkMode 
+                        ? "0 20px 40px rgba(139, 148, 158, 0.3)"
+                        : "0 20px 40px rgba(0, 0, 0, 0.15)"
+                    }}
+                  >
+                    <Card className={`${cardClasses} p-6 h-full flex flex-col items-center text-center transition-all duration-300`}>
+                      {/* Logo/Badge */}
+                      <motion.div
+                        className={`w-24 h-24 rounded-full flex items-center justify-center mb-6 ${
+                          darkMode ? 'bg-opacity-10' : 'bg-opacity-100'
+                        }`}
+                        style={{ backgroundColor: logoData.bgColor }}
+                        whileHover={{ rotate: [0, -5, 5, -5, 0] }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <LogoIcon 
+                          className="w-12 h-12" 
+                          style={{ color: logoData.color }}
                         />
+                      </motion.div>
+
+                      {/* Certificate Name */}
+                      <h3 className={`text-xl font-bold mb-3 ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>
+                        {cert.name}
+                      </h3>
+
+                      {/* Issuer */}
+                      <p className={`text-sm font-semibold ${darkMode ? 'text-[#8B949E]' : 'text-gray-700'} mb-2`}>
+                        {cert.issuer}
+                      </p>
+
+                      {/* Platform & Date */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <Badge className={`${darkMode ? 'bg-[#21262D] text-[#8B949E]' : 'bg-gray-100 text-gray-700'} text-xs`}>
+                          {cert.platform}
+                        </Badge>
+                        <Badge className={`${darkMode ? 'bg-[#21262D] text-[#8B949E]' : 'bg-gray-100 text-gray-700'} text-xs`}>
+                          {cert.date}
+                        </Badge>
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </Card>
+
+                      {/* Verify Credential Link (if available) */}
+                      {cert.credentialUrl && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={`${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} mt-auto`}
+                          onClick={() => window.open(cert.credentialUrl, '_blank')}
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Verify Credential
+                        </Button>
+                      )}
+                    </Card>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         </div>
@@ -490,6 +728,16 @@ const Portfolio = () => {
                       <div className={`w-full h-48 ${darkMode ? 'bg-[#21262D]' : 'bg-gray-100'} rounded-lg mb-4 flex items-center justify-center`}>
                         <Code2 className={`w-12 h-12 ${darkMode ? 'text-[#8B949E]' : 'text-gray-400'}`} />
                       </div>
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge className={`${darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700'} text-xs`}>
+                          {project.status}
+                        </Badge>
+                        {project.role && (
+                          <Badge className={`${darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-700'} text-xs`}>
+                            {project.role}
+                          </Badge>
+                        )}
+                      </div>
                       <h3 className={`text-xl font-semibold mb-3 ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>{project.title}</h3>
                       <p className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} mb-4 line-clamp-3`}>{project.description}</p>
                       <div className="flex flex-wrap gap-2 mb-4">
@@ -507,13 +755,28 @@ const Portfolio = () => {
                           </Badge>
                         )}
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} p-0`}
-                      >
-                        View Details
-                        <ExternalLink className="w-4 h-4 ml-2" />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="ghost" 
+                          className={`${darkMode ? 'text-[#8B949E] hover:text-[#F0F6FC]' : 'text-gray-600 hover:text-gray-900'} p-0`}
+                        >
+                          View Details
+                          <ExternalLink className="w-4 h-4 ml-2" />
+                        </Button>
+                        {project.liveUrl && (
+                          <Button 
+                            variant="ghost" 
+                            className={`${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'} p-0`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open(project.liveUrl, '_blank');
+                            }}
+                          >
+                            Live Site
+                            <ExternalLink className="w-4 h-4 ml-1" />
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </Card>
                 </motion.div>
@@ -714,8 +977,20 @@ const Portfolio = () => {
               className={`${cardClasses} rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto`}
             >
               <div className="p-6">
-                <div className="flex justify-between items-start mb-6">
-                  <h3 className={`text-2xl font-bold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'}`}>{activeProject.title}</h3>
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className={`text-2xl font-bold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'} mb-2`}>{activeProject.title}</h3>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge className={`${darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700'}`}>
+                        {activeProject.status}
+                      </Badge>
+                      {activeProject.role && (
+                        <Badge className={`${darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-700'}`}>
+                          {activeProject.role}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -725,9 +1000,19 @@ const Portfolio = () => {
                     <X className="w-5 h-5" />
                   </Button>
                 </div>
+                
+                {activeProject.note && (
+                  <div className={`${darkMode ? 'bg-yellow-900/20 border-yellow-700/50' : 'bg-yellow-50 border-yellow-200'} border rounded-lg p-3 mb-4`}>
+                    <p className={`${darkMode ? 'text-yellow-400' : 'text-yellow-700'} text-sm font-medium`}>
+                      📝 {activeProject.note}
+                    </p>
+                  </div>
+                )}
+                
                 <p className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} text-lg leading-relaxed mb-6`}>
                   {activeProject.longDescription}
                 </p>
+                
                 <div className="space-y-4 mb-6">
                   <div>
                     <h4 className={`text-lg font-semibold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'} mb-2`}>Technologies Used</h4>
@@ -740,20 +1025,39 @@ const Portfolio = () => {
                     </div>
                   </div>
                   <div>
-                    <h4 className={`text-lg font-semibold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'} mb-2`}>Key Features</h4>
-                    <ul className={`list-disc list-inside ${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} space-y-1`}>
+                    <h4 className={`text-lg font-semibold ${darkMode ? 'text-[#F0F6FC]' : 'text-gray-900'} mb-2`}>Key Achievements</h4>
+                    <ul className={`${darkMode ? 'text-[#8B949E]' : 'text-gray-600'} space-y-2`}>
                       {activeProject.features.map((feature, index) => (
-                        <li key={index}>{feature}</li>
+                        <li key={index} className="flex items-start">
+                          <CheckCircle className={`w-5 h-5 mr-2 mt-0.5 flex-shrink-0 ${darkMode ? 'text-green-400' : 'text-green-600'}`} />
+                          <span>{feature}</span>
+                        </li>
                       ))}
                     </ul>
                   </div>
                 </div>
-                {activeProject.demoUrl && (
-                  <Button className={`${darkMode ? 'bg-[#F0F6FC] text-[#0D1117] hover:bg-[#8B949E]' : 'bg-gray-900 text-white hover:bg-gray-700'}`}>
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    View Demo
-                  </Button>
-                )}
+                
+                <div className="flex gap-3">
+                  {activeProject.liveUrl && (
+                    <Button 
+                      className={`${darkMode ? 'bg-[#F0F6FC] text-[#0D1117] hover:bg-[#8B949E]' : 'bg-gray-900 text-white hover:bg-gray-700'}`}
+                      onClick={() => window.open(activeProject.liveUrl, '_blank')}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Visit Live Site
+                    </Button>
+                  )}
+                  {activeProject.demoUrl && activeProject.demoUrl !== activeProject.liveUrl && (
+                    <Button 
+                      variant="outline"
+                      className={`${darkMode ? 'border-[#21262D] text-[#F0F6FC] hover:bg-[#21262D]' : 'border-gray-300 text-gray-900 hover:bg-gray-100'}`}
+                      onClick={() => window.open(activeProject.demoUrl, '_blank')}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      View Demo
+                    </Button>
+                  )}
+                </div>
               </div>
             </motion.div>
           </motion.div>
