@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { ReactTyped } from 'react-typed';
+import ApiService from '../services/api';
 import { 
   Github, 
   Linkedin, 
@@ -177,16 +178,24 @@ const Portfolio = () => {
     setIsSubmitting(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Prepare data for backend
+      const contactData = {
+        client_name: `${formData.name} (${formData.email})${formData.subject ? ' - ' + formData.subject : ''}`,
+      };
+
+      // Send to backend API
+      await ApiService.createStatusCheck(contactData);
       
       toast({
         title: "Message Sent! ✉️",
         description: "Thank you for reaching out! I'll get back to you soon.",
       });
 
-      setFormData({ name: '', email: '', message: '' });
+      // Reset form
+      setFormData({ name: '', email: '', subject: '', message: '' });
       
     } catch (error) {
+      console.error('Form submission error:', error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again later.",
