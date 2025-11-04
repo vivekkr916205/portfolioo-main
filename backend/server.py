@@ -24,7 +24,15 @@ load_dotenv(ROOT_DIR / '.env')
 # MongoDB connection
 try:
     mongo_url = os.environ['MONGO_URL']
-    client = AsyncIOMotorClient(mongo_url)
+    # Add SSL/TLS configuration for MongoDB Atlas
+    client = AsyncIOMotorClient(
+        mongo_url,
+        tls=True,
+        tlsAllowInvalidCertificates=False,
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=10000,
+        retryWrites=True
+    )
     db = client[os.environ['DB_NAME']]
     logger.info("MongoDB connection initialized")
 except Exception as e:
