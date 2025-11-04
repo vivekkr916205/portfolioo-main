@@ -60,26 +60,40 @@ async def root():
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.dict()
-    status_obj = StatusCheck(**status_dict)
-    _ = await db.status_checks.insert_one(status_obj.dict())
-    return status_obj
+    try:
+        # Use model_dump() instead of dict() for Pydantic v2
+        status_dict = input.model_dump()
+        status_obj = StatusCheck(**status_dict)
+        
+        # Insert into MongoDB
+        result = await db.status_checks.insert_one(status_obj.model_dump())
+        
+        logger.info(f"Status check created: {status_obj.id}")
+        return status_obj
+    except Exception as e:
+        logger.error(f"Error creating status check: {str(e)}")
+        raise
 
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
-    status_checks = await db.status_checks.find().to_list(1000)
-    return [StatusCheck(**status_check) for status_check in status_checks]
+    try:
+        status_checks = await db.status_checks.find().to_list(1000)
+        return [StatusCheck(**status_check) for status_check in status_checks]
+    except Exception as e:
+        logger.error(f"Error fetching status checks: {str(e)}")
+        raise
 
-# Include the router in the main app
-app.include_router(api_router)
-
+# Add CORS middleware BEFORE including routers
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
+    allow_credentials=False,  # Changed to False since we don't use cookies
     allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include the router in the main app
+app.include_router(api_router)
 
 # Configure logging
 logging.basicConfig(
