@@ -38,6 +38,19 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Add CORS middleware IMMEDIATELY after creating app
+cors_origins = os.environ.get('CORS_ORIGINS', '*').split(',')
+cors_origins = [origin.strip() for origin in cors_origins]  # Remove any whitespace
+logger.info(f"CORS origins configured: {cors_origins}")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
@@ -102,18 +115,6 @@ async def get_status_checks():
     except Exception as e:
         logger.error(f"Error fetching status checks: {str(e)}")
         raise
-
-# Add CORS middleware BEFORE including routers
-cors_origins = os.environ.get('CORS_ORIGINS', '*').split(',')
-logger.info(f"CORS origins configured: {cors_origins}")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=False,  # Changed to False since we don't use cookies
-    allow_origins=cors_origins,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # Include the router in the main app
 app.include_router(api_router)
