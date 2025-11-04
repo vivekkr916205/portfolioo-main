@@ -8,14 +8,19 @@ class ApiService {
     try {
       const response = await fetch(`${API_BASE_URL}/status`, {
         method: 'POST',
+        mode: 'cors',
+        credentials: 'omit',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit form');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API Error Response:', errorData);
+        throw new Error(errorData.detail || 'Failed to submit form');
       }
 
       return await response.json();
