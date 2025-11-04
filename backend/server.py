@@ -20,10 +20,28 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(
+    title="Vivek Kumar Portfolio API",
+    description="Backend API for portfolio website",
+    version="1.0.0"
+)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
+
+# Root endpoint (welcome page)
+@app.get("/")
+async def root():
+    return {
+        "message": "Welcome to Vivek Kumar's Portfolio API",
+        "status": "online",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "api_endpoints": {
+            "health": "/api/",
+            "status": "/api/status"
+        }
+    }
 
 
 # Define Models
