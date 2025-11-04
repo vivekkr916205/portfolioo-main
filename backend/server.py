@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -11,13 +11,25 @@ import uuid
 from datetime import datetime
 
 
+# Configure logging first
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+try:
+    mongo_url = os.environ['MONGO_URL']
+    client = AsyncIOMotorClient(mongo_url)
+    db = client[os.environ['DB_NAME']]
+    logger.info("MongoDB connection initialized")
+except Exception as e:
+    logger.error(f"MongoDB connection error: {str(e)}")
+    raise
 
 # Create the main app without a prefix
 app = FastAPI(
@@ -61,18 +73,26 @@ async def root():
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
     try:
+        logger.info(f"Received data: {input}")
+        
         # Use model_dump() instead of dict() for Pydantic v2
         status_dict = input.model_dump()
         status_obj = StatusCheck(**status_dict)
         
-        # Insert into MongoDB
-        result = await db.status_checks.insert_one(status_obj.model_dump())
+        logger.info(f"Created status object: {status_obj}")
         
-        logger.info(f"Status check created: {status_obj.id}")
+        # Convert to dict for MongoDB
+        doc_dict = status_obj.model_dump()
+        logger.info(f"Inserting document: {doc_dict}")
+        
+        # Insert into MongoDB
+        result = await db.status_checks.insert_one(doc_dict)
+        
+        logger.info(f"Status check created with ID: {status_obj.id}")
         return status_obj
     except Exception as e:
-        logger.error(f"Error creating status check: {str(e)}")
-        raise
+        logger.error(f"Error creating status check: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
@@ -84,23 +104,19 @@ async def get_status_checks():
         raise
 
 # Add CORS middleware BEFORE including routers
+cors_origins = os.environ.get('CORS_ORIGINS', '*').split(',')
+logger.info(f"CORS origins configured: {cors_origins}")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=False,  # Changed to False since we don't use cookies
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Include the router in the main app
 app.include_router(api_router)
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
