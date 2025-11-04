@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from typing import List
 import uuid
 from datetime import datetime
+from urllib.parse import quote_plus
 
 
 # Configure logging first
@@ -23,7 +24,11 @@ load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
 try:
+    # Get MongoDB URL - it should already be properly formatted
     mongo_url = os.environ['MONGO_URL']
+    
+    logger.info("Connecting to MongoDB...")
+    
     # Add SSL/TLS configuration for MongoDB Atlas
     client = AsyncIOMotorClient(
         mongo_url,
@@ -34,9 +39,11 @@ try:
         retryWrites=True
     )
     db = client[os.environ['DB_NAME']]
-    logger.info("MongoDB connection initialized")
+    logger.info("MongoDB connection initialized successfully")
 except Exception as e:
     logger.error(f"MongoDB connection error: {str(e)}")
+    logger.error("Make sure your MONGO_URL has properly encoded username and password")
+    logger.error("Use https://www.urlencoder.org/ to encode special characters in password")
     raise
 
 # Create the main app without a prefix
